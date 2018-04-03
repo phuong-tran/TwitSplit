@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/remove_all"
+        android:title="@string/remove_all_messages" />
+
+    <item
+        android:id="@+id/clear_text"
+        android:title="@string/clear_input_message" />
+
+    <item
+        android:id="@+id/about"
+        android:title="@string/about" />
+
+</menu>

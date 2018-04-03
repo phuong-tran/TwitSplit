@@ -1,0 +1,84 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "zalora.com.twitsplit"
+        minSdkVersion 19
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    dataBinding {
+        enabled = true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+//ext.dagger_version ="2.14.1"
+
+dependencies {
+
+    // Logs
+    implementation 'com.android.support:support-v4:27.1.0'
+    compile deps.logs.slf4j
+    compile deps.logs.logback
+
+    // Support libraries
+    implementation deps.support.app_compat
+    implementation deps.support.v4
+    implementation deps.support.design
+    implementation deps.support.app_compat
+    implementation deps.support.constrain_layout
+    implementation deps.support.cardview
+
+    // Architecture components
+    implementation deps.lifecycle.runtime
+    implementation deps.lifecycle.extensions
+    kapt deps.lifecycle.compiler
+
+    //ROOM
+    implementation deps.room.runtime
+    kapt deps.room.compiler
+    implementation deps.room.rxjava2
+
+    // RxJava
+    implementation deps.rx_android
+    implementation deps.rxjava2
+
+    // Dagger
+    implementation deps.dagger.runtime
+    implementation deps.dagger.android
+    implementation deps.dagger.android_support
+
+    kapt deps.databinding_compiler
+    kapt deps.dagger.compiler
+    kapt deps.dagger.android_support_compiler
+
+    // Kotlin
+    implementation deps.kotlin.stdlib
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+}

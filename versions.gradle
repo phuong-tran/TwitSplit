@@ -1,0 +1,74 @@
+ext.deps = [:]
+def versions = [:]
+versions.slf4j = "1.7.25"
+versions.logback = "1.1.1-10"
+versions.support = "27.1.0"
+versions.constrains_layout = "1.0.2"
+versions.kotlin = "1.2.30"
+versions.android_gradle_plugin = "3.1.0"
+versions.arch_core = "1.1.1"
+versions.room = "1.1.0-beta1"
+versions.lifecycle = "1.1.1"
+versions.rxjava2 = "2.1.3"
+versions.rx_android = "2.0.1"
+versions.dagger = "2.14.1"
+versions.databinding = "3.1.0"
+
+def support = [:]
+support.annotations = "com.android.support:support-annotations:$versions.support"
+support.app_compat = "com.android.support:appcompat-v7:$versions.support"
+support.recyclerview = "com.android.support:recyclerview-v7:$versions.support"
+support.cardview = "com.android.support:cardview-v7:$versions.support"
+support.design = "com.android.support:design:$versions.support"
+support.v4 = "com.android.support:support-v4:$versions.support"
+support.core_utils = "com.android.support:support-core-utils:$versions.support"
+support.constrain_layout = "com.android.support.constraint:constraint-layout:$versions.constrains_layout"
+deps.support = support
+
+def room = [:]
+room.runtime = "android.arch.persistence.room:runtime:$versions.room"
+room.compiler = "android.arch.persistence.room:compiler:$versions.room"
+room.rxjava2 = "android.arch.persistence.room:rxjava2:$versions.room"
+room.testing = "android.arch.persistence.room:testing:$versions.room"
+deps.room = room
+
+def lifecycle = [:]
+lifecycle.runtime = "android.arch.lifecycle:runtime:$versions.lifecycle"
+lifecycle.extensions = "android.arch.lifecycle:extensions:$versions.lifecycle"
+lifecycle.java8 = "android.arch.lifecycle:common-java8:$versions.lifecycle"
+lifecycle.compiler = "android.arch.lifecycle:compiler:$versions.lifecycle"
+deps.lifecycle = lifecycle
+
+def dagger = [:]
+dagger.runtime = "com.google.dagger:dagger:$versions.dagger"
+dagger.android = "com.google.dagger:dagger-android:$versions.dagger"
+dagger.android_support = "com.google.dagger:dagger-android-support:$versions.dagger"
+dagger.compiler = "com.google.dagger:dagger-compiler:$versions.dagger"
+dagger.android_support_compiler = "com.google.dagger:dagger-android-processor:$versions.dagger"
+deps.dagger = dagger
+
+
+def build_versions = [:]
+build_versions.min_sdk = 14
+build_versions.target_sdk = 26
+build_versions.build_tools = "27.0.3"
+ext.build_versions = build_versions
+
+
+def logs = [:]
+logs.slf4j = "org.slf4j:slf4j-api:$versions.slf4j"
+logs.logback="com.github.tony19:logback-android:$versions.logback"
+deps.logs = logs
+
+
+def kotlin = [:]
+kotlin.stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jre7:$versions.kotlin"
+kotlin.test = "org.jetbrains.kotlin:kotlin-test-junit:$versions.kotlin"
+kotlin.plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+deps.kotlin = kotlin
+
+deps.android_gradle_plugin = "com.android.tools.build:gradle:$versions.android_gradle_plugin"
+deps.rxjava2 = "io.reactivex.rxjava2:rxjava:$versions.rxjava2"
+deps.rx_android = "io.reactivex.rxjava2:rxandroid:$versions.rx_android"
+deps.databinding_compiler="com.android.databinding:compiler:$versions.databinding"
+ext.deps = deps
