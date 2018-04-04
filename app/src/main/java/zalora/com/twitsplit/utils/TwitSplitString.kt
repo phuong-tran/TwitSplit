@@ -68,7 +68,7 @@ class TwitSplitString {
         return builder.toString()
     }
 
-    private fun concatStringFromIndexToIndex(words: Array<String>, from: Int): String {
+    private fun concatStringFromIndexToEnd(words: Array<String>, from: Int): String {
         val stringBuilder = StringBuilder()
         for (i in from until words.size) {
             stringBuilder.append(words[i]).append(" ")
@@ -95,13 +95,13 @@ class TwitSplitString {
         var index = 0
         var messageLineInfo = MessageLineInfo()
         for (i in 0 until estimateLineNumber) {
-            val stringWithIndicator = (i + 1).toString() + "/" + estimateLineNumber + WHITE_SPACE
-            messageLineInfo = getMessageLine(stringWithIndicator, words, limit, index)
+            val indicator = (i + 1).toString() + "/" + estimateLineNumber + WHITE_SPACE
+            messageLineInfo = getMessageLine(indicator, words, limit, index)
             index = messageLineInfo.stopAt
             results.add(messageLineInfo.content)
         }
         if (messageLineInfo.stopAt + 1 < words.size - 1) {
-            val remainString = concatStringFromIndexToIndex(words, messageLineInfo.stopAt).trim()
+            val remainString = concatStringFromIndexToEnd(words, messageLineInfo.stopAt).trim()
             val lines = estimateLineNumber + estimateRemainingLines(remainString, estimateLineNumber, limit)
             return splitMessage(words, lines, limit)
         }

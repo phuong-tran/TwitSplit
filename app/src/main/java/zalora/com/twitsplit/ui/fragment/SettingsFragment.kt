@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import zalora.com.twitsplit.R
 import zalora.com.twitsplit.di.Injectable
-import zalora.com.twitsplit.utils.Utils
 
 
 class SettingsFragment : Fragment(), Injectable {
@@ -27,8 +26,6 @@ class SettingsFragment : Fragment(), Injectable {
         setHasOptionsMenu(false)
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
+
 
 }

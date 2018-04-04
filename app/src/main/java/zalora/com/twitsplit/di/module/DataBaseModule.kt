@@ -17,14 +17,12 @@ class DataBaseModule {
     }
     @Singleton
     @Provides
-    //@JvmStatic
     internal fun provideFeedMeDatabase(@ApplicationContext context: Context): TweetDataBase {
         return Room.databaseBuilder(context.applicationContext, TweetDataBase::class.java, DATABASE_NAME).build()
     }
 
     @Singleton
     @Provides
-    //@JvmStatic
     internal fun provideTweetDao(db: TweetDataBase): TweetDao {
         return db.tweeDao()
     }

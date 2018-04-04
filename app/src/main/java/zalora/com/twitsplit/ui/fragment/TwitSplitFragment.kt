@@ -28,6 +28,9 @@ import zalora.com.twitsplit.utils.Utils
 import kotlinx.android.synthetic.main.fragment_twit_split.*
 import zalora.com.twitsplit.persistence.TweetDao
 import javax.inject.Inject
+import android.support.v7.widget.DividerItemDecoration
+
+
 
 class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
 
@@ -69,10 +72,11 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
         viewModel = ViewModelProviders.of(activity!!, viewModelFactory).get(TweetsViewModel::class.java)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
+        val decoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+        binding.recyclerView.addItemDecoration(decoration)
         binding.presenter = this
         val observer: Observer<MutableList<Tweet>> = Observer { it ->
             adapter.run {
-                Utils.hideKeyboard(binding.messageEditText.context)
                 items.clear()
                 items.addAll(ArrayList(it))
                 notifyDataSetChanged()

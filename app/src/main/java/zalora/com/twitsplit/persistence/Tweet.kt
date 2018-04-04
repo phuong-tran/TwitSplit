@@ -14,7 +14,7 @@ import java.util.*
 class Tweet {
     companion object {
         fun buildTweet(message: String) : Tweet {
-            var t: Tweet = Tweet()
+            var t = Tweet()
             t.message = message
             return t
         }

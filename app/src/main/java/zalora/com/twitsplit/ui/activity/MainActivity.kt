@@ -9,6 +9,7 @@ import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_main.*
 import org.slf4j.LoggerFactory
 import zalora.com.twitsplit.R
+import zalora.com.twitsplit.ui.common.MainActivityLifeCycleLogger
 import zalora.com.twitsplit.ui.common.NavigationController
 import javax.inject.Inject
 
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
     private val LOG = LoggerFactory.getLogger(MainActivity::class.java)
 
     override fun supportFragmentInjector() = dispatchingAndroidInjector
+
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
 
@@ -44,6 +46,8 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
         if (savedInstanceState == null) {
             navigationController!!.navigateToTwitSplitFragment()
         }
+        lifecycle.addObserver(MainActivityLifeCycleLogger())
     }
+
 
 }
