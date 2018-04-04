@@ -6,7 +6,6 @@ import zalora.com.twitsplit.di.applyAutoInjector
 import zalora.com.twitsplit.di.component.DaggerAppComponent
 
 class App: DaggerApplication() {
-    //@Inject lateinit var appLifecycleCallbacks: AppLifecycleCallbacks
 
     override fun applicationInjector() = DaggerAppComponent.builder()
             .application(this)
@@ -15,15 +14,7 @@ class App: DaggerApplication() {
     override fun onCreate() {
         super.onCreate()
         applyAutoInjector()
-        //appLifecycleCallbacks.onCreate(this)
     }
-
-/*
-    override fun onTerminate() {
-        //appLifecycleCallbacks.onTerminate(this)
-        super.onTerminate()
-    }
-*/
 
 
 }
