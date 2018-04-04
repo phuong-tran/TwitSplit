@@ -13,6 +13,7 @@ class TwitSplitStringTest {
 
         const val TEST_STRING1 = "I can't believe Tweeter now supports chunking my messages, so I don't have to do it myself."
 
+
         const val TEST_STRING2 = "Kotlin is a programming language introduced by JetBrains, the" +
                 " official designer of the most intelligent Java IDE, named Intellij IDEA. This is a strongly statically" +
                 " typed language that runs on JVM. In 2017, Google announced Kotlin is an official language for android development." +

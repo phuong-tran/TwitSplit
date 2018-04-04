@@ -7,11 +7,15 @@ import android.support.v7.app.AppCompatActivity
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_main.*
+import org.greenrobot.eventbus.EventBus
 import org.slf4j.LoggerFactory
 import zalora.com.twitsplit.R
 import zalora.com.twitsplit.ui.common.MainActivityLifeCycleLogger
 import zalora.com.twitsplit.ui.common.NavigationController
 import javax.inject.Inject
+import org.greenrobot.eventbus.ThreadMode
+import org.greenrobot.eventbus.Subscribe
+import zalora.com.twitsplit.event.TweetEvent
 
 
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
@@ -22,7 +26,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
     private val LOG = LoggerFactory.getLogger(MainActivity::class.java)
 
     override fun supportFragmentInjector() = dispatchingAndroidInjector
-
+    @Inject lateinit var mainActivityLifeCycleLogger: MainActivityLifeCycleLogger
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
 
@@ -44,10 +48,9 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
         setContentView(R.layout.activity_main)
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         if (savedInstanceState == null) {
-            navigationController!!.navigateToTwitSplitFragment()
+            navigationController.navigateToTwitSplitFragment()
         }
-        lifecycle.addObserver(MainActivityLifeCycleLogger())
+        // DEMO MainActivity lifecycle watcher
+        lifecycle.addObserver(mainActivityLifeCycleLogger)
     }
-
-
 }

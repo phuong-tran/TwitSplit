@@ -4,6 +4,7 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
+import org.greenrobot.eventbus.EventBus
 import zalora.com.twitsplit.App
 import zalora.com.twitsplit.di.scope.ApplicationContext
 import zalora.com.twitsplit.utils.TwitSplitString
@@ -23,14 +24,16 @@ class AppModule {
 
     fun provideTwitSplitString(): TwitSplitString = TwitSplitString()
 
-  /*@Singleton
-    @Provides
-
-    fun provideAppLifecycleCallbacks(): AppLifecycleCallbacks = AppLifecycleCallbacksImpl()*/
 
     @Singleton
     @Provides
 
     fun provideDisposable() = CompositeDisposable()
+
+
+    @Singleton
+    @Provides
+    fun provideEventBus() = EventBus.getDefault()
+
 
 }

@@ -29,7 +29,8 @@ import kotlinx.android.synthetic.main.fragment_twit_split.*
 import zalora.com.twitsplit.persistence.TweetDao
 import javax.inject.Inject
 import android.support.v7.widget.DividerItemDecoration
-
+import org.greenrobot.eventbus.EventBus
+import zalora.com.twitsplit.event.TweetEvent
 
 
 class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
@@ -57,6 +58,9 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
     @Inject
     lateinit var disposable: CompositeDisposable
 
+    @Inject
+    lateinit var eventBus: EventBus
+
 
     private val adapter = TweetAdapter()
 
@@ -72,8 +76,8 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
         viewModel = ViewModelProviders.of(activity!!, viewModelFactory).get(TweetsViewModel::class.java)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
-        val decoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-        binding.recyclerView.addItemDecoration(decoration)
+        //val decoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+        //binding.recyclerView.addItemDecoration(decoration)
         binding.presenter = this
         val observer: Observer<MutableList<Tweet>> = Observer { it ->
             adapter.run {
@@ -99,9 +103,11 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
             R.id.remove_all -> {
                 disposable.add(Completable.fromAction({
                     tweetDao.deleteAll()
+                    viewModel.tweets.value!!.clear()
                 }).subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread()).subscribe {
-
+                            eventBus.post(TweetEvent(TweetEvent.ACTION_REMOVE_ALL_DATA))
+                            LOG.debug("Remove all messages DONE")
                         })
                 return true
             }
@@ -161,7 +167,6 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
             } else {
                 LOG.debug("Multi Messages")
                 send_button.isEnabled = false
-                Utils.hideKeyboard(send_button.context)
                 val estimateLines = twitSplitString.estimateLines(text, TwitSplitString.LIMIT_CHARACTERS)
                 val lines = twitSplitString.splitMessage(twitSplitString.getWordArray(text), estimateLines, TwitSplitString.LIMIT_CHARACTERS)
                 val tweets = mutableListOf<Tweet>()
@@ -175,6 +180,7 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
                     viewModel.tweets.value!!.addAll(0, tweets)
                     send_button.isEnabled = true
                     LOG.debug("Insert Multi Messages DONE")
+                    eventBus.post(TweetEvent(TweetEvent.ACTION_INSERT_DATA))
                 })
             }
         }

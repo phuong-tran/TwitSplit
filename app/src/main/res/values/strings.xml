@@ -5,7 +5,7 @@
     <string name="input_message_hint">Input your message here</string>
     <string name="send_message">Send</string>
     <string name ="invalid_message">Invalid message</string>
-    <string name="remove_all_messages">Remove All Messagges</string>
+    <string name="remove_all_messages">Remove All Messages</string>
     <string name="about">About</string>
     <string name="clear_input_message">Clear input message</string>
 </resources>

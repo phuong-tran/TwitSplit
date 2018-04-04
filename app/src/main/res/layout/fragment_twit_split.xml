@@ -20,6 +20,7 @@
         <RelativeLayout
             android:id="@+id/send_container"
             android:layout_width="match_parent"
+            android:background="@color/colorSendContainer"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true">
@@ -30,19 +31,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
+                android:layout_centerVertical="true"
                 android:onClick="@{presenter::sendMessages}"
                 android:text="@string/send_message" />
 
             <EditText
+                android:textColor="@color/colorPrimary"
+                android:textColorHint="@color/colorAccent"
                 android:id="@+id/message_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@id/send_button"
-
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:ems="10"
+                android:inputType="textMultiLine"
+                android:lines="3"
                 android:hint="@string/input_message_hint"
-                android:inputType="textPersonName" />
+                 />
 
         </RelativeLayout>
 
