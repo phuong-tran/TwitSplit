@@ -102,7 +102,7 @@ class TwitSplitString {
             index = messageLineInfo.stopAt
             results.add(messageLineInfo.content)
         }
-        if (messageLineInfo.stopAt + 1 < words.size - 1) {
+        if (messageLineInfo.stopAt < words.size - 1) {
             val remainString = concatStringFromIndexToEnd(words, messageLineInfo.stopAt).trim()
             val lines = estimateLineNumber + estimateRemainingLines(remainString, estimateLineNumber, limit)
             return splitMessage(words, lines, limit)

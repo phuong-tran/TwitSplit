@@ -3,11 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.SettingsFragment">
+    tools:context=".ui.fragment.AboutFragment">
 
     <TextView
         android:layout_width="match_parent"
+        android:gravity="center"
         android:layout_height="match_parent"
-        android:text="@string/settings" />
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="@string/app_name" />
 
 </FrameLayout>

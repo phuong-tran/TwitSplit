@@ -45,25 +45,26 @@ class TwitSplitStringTest {
     @Test
     fun splitMessage2() {
 
-        val expectedMessageNumber = 12
+        val expectedMessageNumber = 13
 
         val estimate = twitSplitString.estimateLines(TEST_STRING2, TwitSplitString.LIMIT_CHARACTERS)
 
         var results = twitSplitString.splitMessage(twitSplitString.getWordArray(TEST_STRING2), estimate, TwitSplitString.LIMIT_CHARACTERS)
 
         val expectedResults = listOf(
-                "1/12 Kotlin is a programming language introduced",
-                "2/12 by JetBrains, the official designer of the",
-                "3/12 most intelligent Java IDE, named Intellij",
-                "4/12 IDEA. This is a strongly statically typed",
-                "5/12 language that runs on JVM. In 2017, Google",
-                "6/12 announced Kotlin is an official language for",
-                "7/12 android development. Kotlin is an open source",
-                "8/12 programming language that combines",
-                "9/12 object-oriented programming and functional",
-                "10/12 features into a unique platform. The content",
-                "11/12 is divided into various chapters that",
-                "12/12 contain related topics with simple and")
+                "1/13 Kotlin is a programming language introduced",
+                "2/13 by JetBrains, the official designer of the",
+                "3/13 most intelligent Java IDE, named Intellij",
+                "4/13 IDEA. This is a strongly statically typed",
+                "5/13 language that runs on JVM. In 2017, Google",
+                "6/13 announced Kotlin is an official language for",
+                "7/13 android development. Kotlin is an open source",
+                "8/13 programming language that combines",
+                "9/13 object-oriented programming and functional",
+                "10/13 features into a unique platform. The content",
+                "11/13 is divided into various chapters that",
+                "12/13 contain related topics with simple and",
+                "13/13 useful examples.")
 
 
         val areEqual = results.containsAll(expectedResults) && results.size == expectedMessageNumber

@@ -7,7 +7,7 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 import zalora.com.twitsplit.di.scope.ViewModelKey
-import zalora.com.twitsplit.ui.fragment.SettingsFragment
+import zalora.com.twitsplit.ui.fragment.AboutFragment
 import zalora.com.twitsplit.ui.fragment.TwitSplitFragment
 import zalora.com.twitsplit.ui.viewmodel.TweetsViewModel
 import zalora.com.twitsplit.ui.viewmodel.ViewModelFactory
@@ -19,7 +19,7 @@ abstract class FragmentBuilderModule {
     internal abstract fun contributeTwitSplitFragment(): TwitSplitFragment
 
     @ContributesAndroidInjector
-    internal abstract fun contributeSettingsFragment(): SettingsFragment
+    internal abstract fun contributeSettingsFragment(): AboutFragment
 
 
     @Binds

@@ -29,6 +29,7 @@ import zalora.com.twitsplit.di.Injectable
 import zalora.com.twitsplit.event.TweetEvent
 import zalora.com.twitsplit.persistence.Tweet
 import zalora.com.twitsplit.persistence.TweetDao
+import zalora.com.twitsplit.ui.common.NavigationController
 import zalora.com.twitsplit.ui.presenter.TwitSplitPresenter
 import zalora.com.twitsplit.ui.viewmodel.TweetsViewModel
 import zalora.com.twitsplit.utils.TwitSplitString
@@ -63,7 +64,6 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
 
     @Inject
     lateinit var eventBus: EventBus
-
 
     private val adapter = TweetAdapter()
 
@@ -243,8 +243,12 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
 
     override fun onDestroy() {
         super.onDestroy()
-        message_edit_text.removeTextChangedListener(textWatcher)
         disposable.clear()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        message_edit_text.removeTextChangedListener(textWatcher)
     }
 
     override fun onStart() {

@@ -2,7 +2,7 @@ package zalora.com.twitsplit.ui.common
 
 import zalora.com.twitsplit.R
 import zalora.com.twitsplit.ui.activity.MainActivity
-import zalora.com.twitsplit.ui.fragment.SettingsFragment
+import zalora.com.twitsplit.ui.fragment.AboutFragment
 import zalora.com.twitsplit.ui.fragment.TwitSplitFragment
 import javax.inject.Inject
 
@@ -17,9 +17,9 @@ constructor(mainActivity: MainActivity) {
                 .commitAllowingStateLoss()
     }
 
-    fun navigateToSettingFragment() {
+    fun navigateToAboutFragment() {
         fragmentManager.beginTransaction()
-                .replace(containerId, SettingsFragment.newInstance())
+                .replace(containerId, AboutFragment.newInstance())
                 .commitAllowingStateLoss()
     }
 }

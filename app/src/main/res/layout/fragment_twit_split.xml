@@ -37,7 +37,7 @@
 
             <EditText
                 android:textColor="@color/colorPrimary"
-                android:textColorHint="@color/colorAccent"
+                android:textColorHint="@color/color_hint"
                 android:id="@+id/message_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -31,8 +31,8 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
                 navigationController.navigateToTwitSplitFragment()
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_settings -> {
-                navigationController.navigateToSettingFragment()
+            R.id.navigation_about -> {
+                navigationController.navigateToAboutFragment()
                 return@OnNavigationItemSelectedListener true
             }
         }

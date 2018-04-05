@@ -9,16 +9,16 @@ import zalora.com.twitsplit.R
 import zalora.com.twitsplit.di.Injectable
 
 
-class SettingsFragment : Fragment(), Injectable {
+class AboutFragment : Fragment(), Injectable {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_settings, container, false)
+        return inflater.inflate(R.layout.fragment_about, container, false)
     }
 
     companion object {
-        fun newInstance() = SettingsFragment()
+        fun newInstance() = AboutFragment()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
