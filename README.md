@@ -45,7 +45,7 @@ all of them meeting the 50 character requirement.
 	com.android.support.constraint:constraint-layout
 	
 #### Data binding
-		com.android.databinding:compiler
+	 com.android.databinding:compiler
 
 #### ROOM
 	android.arch.persistence.room:runtime
@@ -96,7 +96,7 @@ all of them meeting the 50 character requirement.
 	 3)  Calculate indicator lines 
 	     indicatorLines = indicatorString.length / 50  
       
-	 4) estimate = originalLines + indicatorLines  
+	 4)  estimate = originalLines + indicatorLines
 
 #### Step 2
 
