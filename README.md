@@ -139,10 +139,10 @@ Check out : [**TwitSplitString.kt**](https://github.com/phuong-tran/TwitSplit/bl
 ![Demo1](https://github.com/phuong-tran/TwitSplit/blob/master/demo/Demo1.png)
 
 
-![Demo2.1](https://github.com/phuong-tran/TwitSplit/blob/master/demo/Demo2.1.png)
+![Demo2.1](https://github.com/phuong-tran/TwitSplit/blob/master/demo/Demo2-1.png)
 
 
-![Demo2.2](https://github.com/phuong-tran/TwitSplit/blob/master/demo/Demo2.2.png)
+![Demo2.2](https://github.com/phuong-tran/TwitSplit/blob/master/demo/Demo2-2.png)
 
 	
 
