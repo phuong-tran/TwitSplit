@@ -95,15 +95,15 @@ class TwitSplitString {
     fun splitMessage(words: Array<String>, estimateLineNumber: Int, limit: Int): List<String> {
         val results = ArrayList<String>()
         var index = 0
-        var messageLineInfo = MessageLineInfo()
-        for (i in 0 until estimateLineNumber) {
-            val indicator = (i + 1).toString() + "/" + estimateLineNumber + WHITE_SPACE
-            messageLineInfo = getMessageLine(indicator, words, limit, index)
+        for (i in 1..estimateLineNumber) {
+            val stringIndicator = i.toString() + "/" + estimateLineNumber + WHITE_SPACE
+            var  messageLineInfo = getMessageLine(stringIndicator, words, limit, index)
             index = messageLineInfo.stopAt
             results.add(messageLineInfo.content)
         }
-        if (messageLineInfo.stopAt < words.size - 1) {
-            val remainString = concatStringFromIndexToEnd(words, messageLineInfo.stopAt).trim()
+
+        if (index < words.size - 1) {
+            val remainString = concatStringFromIndexToEnd(words, index).trim()
             val lines = estimateLineNumber + estimateRemainingLines(remainString, estimateLineNumber, limit)
             return splitMessage(words, lines, limit)
         }
