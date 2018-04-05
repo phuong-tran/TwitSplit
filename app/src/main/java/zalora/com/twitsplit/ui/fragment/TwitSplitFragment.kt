@@ -9,31 +9,31 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import android.widget.Toast
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_twit_split.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.slf4j.LoggerFactory
+import zalora.com.twitsplit.Config
 import zalora.com.twitsplit.R
 import zalora.com.twitsplit.databinding.FragmentTwitSplitBinding
 import zalora.com.twitsplit.databinding.TweetMessageItemBinding
 import zalora.com.twitsplit.di.Injectable
+import zalora.com.twitsplit.event.TweetEvent
 import zalora.com.twitsplit.persistence.Tweet
+import zalora.com.twitsplit.persistence.TweetDao
 import zalora.com.twitsplit.ui.presenter.TwitSplitPresenter
 import zalora.com.twitsplit.ui.viewmodel.TweetsViewModel
 import zalora.com.twitsplit.utils.TwitSplitString
 import zalora.com.twitsplit.utils.Utils
-import kotlinx.android.synthetic.main.fragment_twit_split.*
-import zalora.com.twitsplit.persistence.TweetDao
 import javax.inject.Inject
-import android.support.v7.widget.DividerItemDecoration
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
-import zalora.com.twitsplit.Config
-import zalora.com.twitsplit.event.TweetEvent
 
 
 class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
@@ -67,12 +67,27 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
 
     private val adapter = TweetAdapter()
 
+    var textWatcher: TextWatcher
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             DataBindingUtil.inflate<FragmentTwitSplitBinding>(inflater, R.layout.fragment_twit_split, container, false).also {
                 binding = it
             }.root
 
+
+    init {
+        textWatcher = object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                send_button.isEnabled = s.trim().isNotEmpty()
+            }
+        }
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -89,6 +104,9 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
                 notifyDataSetChanged()
             }
         }
+
+        message_edit_text.addTextChangedListener(textWatcher)
+
 
         viewModel.tweets.observe(this, observer)
 
@@ -140,12 +158,12 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
 
     override fun onResume() {
         super.onResume()
-        send_button.isEnabled = true
         if (viewModel.lastMessage.value!!.isNotEmpty()) {
             var text = viewModel.lastMessage.value
             binding.messageEditText.text = Editable.Factory.getInstance().newEditable(text)
             binding.messageEditText.setSelection(text!!.length)
         }
+        send_button.isEnabled = message_edit_text.text.trim().isNotEmpty()
     }
 
 
@@ -157,7 +175,7 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
         }
     }
 
-    fun sendMessagesUseEventBus() {
+    private fun sendMessagesUseEventBus() {
         Utils.hideKeyboard(send_button.context)
         val text = binding.messageEditText.text.toString()
         var valid: Boolean = twitSplitString.isValidMessages(text, TwitSplitString.LIMIT_CHARACTERS)
@@ -198,7 +216,7 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
                     viewModel.tweets.value!!.add(0, Tweet.buildTweet(text))
                 }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
                     clearText()
-                    send_button.isEnabled = true
+                    //send_button.isEnabled = true
                     LOG.debug("Insert Single Messages DONE")
                 })
             } else {
@@ -215,7 +233,7 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
                     viewModel.tweets.value!!.addAll(0, tweets)
                 }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
                     clearText()
-                    send_button.isEnabled = true
+                    //send_button.isEnabled = true
                     LOG.debug("Insert Multi Messages DONE")
                     eventBus.post(TweetEvent(TweetEvent.ACTION_INSERT_DATA))
                 })
@@ -225,6 +243,7 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
 
     override fun onDestroy() {
         super.onDestroy()
+        message_edit_text.removeTextChangedListener(textWatcher)
         disposable.clear()
     }
 
@@ -255,7 +274,7 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
 
             TweetEvent.ACTION_INSERT_DATA -> {
                 clearText()
-                send_button.isEnabled = true
+                //send_button.isEnabled = true
                 Utils.hideKeyboard(send_button.context)
                 LOG.debug("Insert Tweets: ACTION_INSERT_DATA")
             }
