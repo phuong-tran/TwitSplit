@@ -30,6 +30,9 @@ import zalora.com.twitsplit.persistence.TweetDao
 import javax.inject.Inject
 import android.support.v7.widget.DividerItemDecoration
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
+import zalora.com.twitsplit.Config
 import zalora.com.twitsplit.event.TweetEvent
 
 
@@ -101,16 +104,14 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.remove_all -> {
-                disposable.add(Completable.fromAction({
-                    tweetDao.deleteAll()
-                    viewModel.tweets.value!!.clear()
-                }).subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread()).subscribe {
-                            eventBus.post(TweetEvent(TweetEvent.ACTION_REMOVE_ALL_DATA))
-                            LOG.debug("Remove all messages DONE")
-                        })
+                if (Config.USE_EVENT_BUS) {
+                    viewModel.removeAllMessages()
+                } else {
+                    removeAllMessagesNonEventBus()
+                }
                 return true
             }
+
             R.id.about -> {
                 Toast.makeText(context, R.string.about, Toast.LENGTH_LONG).show()
                 return true
@@ -139,6 +140,7 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
 
     override fun onResume() {
         super.onResume()
+        send_button.isEnabled = true
         if (viewModel.lastMessage.value!!.isNotEmpty()) {
             var text = viewModel.lastMessage.value
             binding.messageEditText.text = Editable.Factory.getInstance().newEditable(text)
@@ -146,7 +148,42 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
         }
     }
 
+
     override fun sendMessages(view: View) {
+        if (Config.USE_EVENT_BUS) {
+            sendMessagesUseEventBus()
+        } else {
+            sendMessagesNonEventBus()
+        }
+    }
+
+    fun sendMessagesUseEventBus() {
+        Utils.hideKeyboard(send_button.context)
+        val text = binding.messageEditText.text.toString()
+        var valid: Boolean = twitSplitString.isValidMessages(text, TwitSplitString.LIMIT_CHARACTERS)
+        if (!valid) {
+            Toast.makeText(context, R.string.invalid_message, Toast.LENGTH_LONG).show()
+        } else {
+            send_button.isEnabled = false
+            viewModel.insertMessage(text)
+        }
+
+    }
+
+
+    private fun removeAllMessagesNonEventBus() {
+        disposable.add(Completable.fromAction({
+            tweetDao.deleteAll()
+            viewModel.tweets.value!!.clear()
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe {
+                    eventBus.post(TweetEvent(TweetEvent.ACTION_REMOVE_ALL_DATA))
+                    LOG.debug("Remove all messages DONE")
+                })
+    }
+
+
+    private fun sendMessagesNonEventBus() {
         val text = binding.messageEditText.text.toString()
         var valid: Boolean = twitSplitString.isValidMessages(text, TwitSplitString.LIMIT_CHARACTERS)
         if (!valid) {
@@ -158,9 +195,9 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
                 Utils.hideKeyboard(send_button.context)
                 disposable.add(Completable.fromAction {
                     tweetDao.insertTweet(Tweet.buildTweet(text))
+                    viewModel.tweets.value!!.add(0, Tweet.buildTweet(text))
                 }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
                     clearText()
-                    viewModel.tweets.value!!.add(0,Tweet.buildTweet(text))
                     send_button.isEnabled = true
                     LOG.debug("Insert Single Messages DONE")
                 })
@@ -175,9 +212,9 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
                         tweets.add(Tweet.buildTweet(it))
                     }
                     tweetDao.insertTweets(tweets)
+                    viewModel.tweets.value!!.addAll(0, tweets)
                 }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
                     clearText()
-                    viewModel.tweets.value!!.addAll(0, tweets)
                     send_button.isEnabled = true
                     LOG.debug("Insert Multi Messages DONE")
                     eventBus.post(TweetEvent(TweetEvent.ACTION_INSERT_DATA))
@@ -191,8 +228,42 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
         disposable.clear()
     }
 
+    override fun onStart() {
+        super.onStart()
+        if (Config.USE_EVENT_BUS) {
+            eventBus.register(this)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (Config.USE_EVENT_BUS) {
+            eventBus.unregister(this)
+        }
+    }
+
     private fun clearText() {
         binding.messageEditText.text = Editable.Factory.getInstance().newEditable("")
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onMessageEvent(event: TweetEvent) {
+        when (event.action) {
+            TweetEvent.ACTION_FETCH_DATA -> {
+                LOG.debug("Fetch Tweets: ACTION_FETCH_DATA")
+            }
+
+            TweetEvent.ACTION_INSERT_DATA -> {
+                clearText()
+                send_button.isEnabled = true
+                Utils.hideKeyboard(send_button.context)
+                LOG.debug("Insert Tweets: ACTION_INSERT_DATA")
+            }
+
+            TweetEvent.ACTION_REMOVE_ALL_DATA -> {
+                LOG.debug("Remove all Tweets: ACTION_REMOVE_ALL_DATA")
+            }
+        }
     }
 }
 
@@ -210,4 +281,5 @@ class TweetAdapter : RecyclerView.Adapter<TweetAdapter.ViewHolder>() {
     override fun getItemCount() = items.size
 
     inner class ViewHolder(val binding: TweetMessageItemBinding) : RecyclerView.ViewHolder(binding.root)
+
 }

@@ -8,7 +8,7 @@ import android.arch.persistence.room.OnConflictStrategy
 @Dao
 interface TweetDao {
     companion object {
-       const val SELECT_ALL_TWEETS:String = "SELECT * FROM tweets ORDER BY createdDate DESC"
+       const val SELECT_ALL_TWEETS:String = "SELECT * FROM tweets ORDER BY id ASC"
        const val COUNT:String = "SELECT COUNT(*) from tweets"
        const val DELETE_ALL_TWEET:String = "DELETE FROM tweets"
        const val DELETE_TWEET:String = "DELETE FROM tweets WHERE id = :id"

@@ -7,14 +7,15 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.slf4j.LoggerFactory
+import zalora.com.twitsplit.Config
 import zalora.com.twitsplit.event.TweetEvent
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MainActivityLifeCycleLogger @Inject constructor(val eventBus: EventBus) : LifecycleObserver {
+class MainActivityLifeCycleWatcher @Inject constructor(val eventBus: EventBus) : LifecycleObserver {
 
-    private val LOG = LoggerFactory.getLogger(MainActivityLifeCycleLogger::class.java)
+    private val LOG = LoggerFactory.getLogger(MainActivityLifeCycleWatcher::class.java)
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     internal fun onCreate() {
@@ -24,14 +25,21 @@ class MainActivityLifeCycleLogger @Inject constructor(val eventBus: EventBus) : 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     internal fun onStart() {
         LOG.debug("MainActivity onStart")
-        eventBus.register(this)
+        // Demo
+        if (!Config.USE_EVENT_BUS) {
+            eventBus.register(this)
+        }
     }
 
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     internal fun onStop() {
         LOG.debug("MainActivity onStop")
-        eventBus.unregister(this)
+
+        // DEMO
+        if (!Config.USE_EVENT_BUS) {
+            eventBus.unregister(this)
+        }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
@@ -49,9 +57,10 @@ class MainActivityLifeCycleLogger @Inject constructor(val eventBus: EventBus) : 
         LOG.debug("MainActivity onDestroy")
     }
 
+    // DEMO How eventBus work?
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessageEvent(event: TweetEvent) {
-        when(event.action) {
+        when (event.action) {
             TweetEvent.ACTION_FETCH_DATA -> {
                 LOG.debug("Fetch Tweets: ACTION_FETCH_DATA")
             }

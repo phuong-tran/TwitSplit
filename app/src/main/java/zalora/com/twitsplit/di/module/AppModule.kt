@@ -21,7 +21,6 @@ class AppModule {
 
     @Singleton
     @Provides
-
     fun provideTwitSplitString(): TwitSplitString = TwitSplitString()
 
 

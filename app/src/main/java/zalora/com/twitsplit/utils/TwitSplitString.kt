@@ -1,6 +1,8 @@
 package zalora.com.twitsplit.utils
 
+import javax.inject.Singleton
 
+@Singleton
 class TwitSplitString {
     companion object {
         const val LIMIT_CHARACTERS:Int = 50
