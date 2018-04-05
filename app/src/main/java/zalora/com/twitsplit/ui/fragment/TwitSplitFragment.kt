@@ -222,10 +222,10 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
             } else {
                 LOG.debug("Multi Messages")
                 send_button.isEnabled = false
-                val estimateLines = twitSplitString.estimateLines(text, TwitSplitString.LIMIT_CHARACTERS)
-                val lines = twitSplitString.splitMessage(twitSplitString.getWordArray(text), estimateLines, TwitSplitString.LIMIT_CHARACTERS)
-                val tweets = mutableListOf<Tweet>()
                 disposable.add(Completable.fromAction {
+                    val estimateLines = twitSplitString.estimateLines(text, TwitSplitString.LIMIT_CHARACTERS)
+                    val lines = twitSplitString.splitMessage(twitSplitString.getWordArray(text), estimateLines, TwitSplitString.LIMIT_CHARACTERS)
+                    val tweets = mutableListOf<Tweet>()
                     lines.forEach { it ->
                         tweets.add(Tweet.buildTweet(it))
                     }
