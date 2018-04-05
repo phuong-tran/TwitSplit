@@ -9,6 +9,6 @@ import zalora.com.twitsplit.ui.activity.MainActivity
 abstract class MainActivityBuilderModule {
 
     @ContributesAndroidInjector(modules = [FragmentBuilderModule::class])
-    abstract fun bindMainActivity(): MainActivity
+    abstract fun contributeMainActivity(): MainActivity
 
 }
