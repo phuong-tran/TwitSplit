@@ -177,7 +177,7 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
 
     private fun sendMessagesUseEventBus() {
         Utils.hideKeyboard(send_button.context)
-        val text = binding.messageEditText.text.toString()
+        val text = binding.messageEditText.text.toString().trim()
         var valid: Boolean = twitSplitString.isValidMessages(text, TwitSplitString.LIMIT_CHARACTERS)
         if (!valid) {
             Toast.makeText(context, R.string.invalid_message, Toast.LENGTH_LONG).show()
@@ -202,7 +202,7 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
 
 
     private fun sendMessagesNonEventBus() {
-        val text = binding.messageEditText.text.toString()
+        val text = binding.messageEditText.text.toString().trim()
         var valid: Boolean = twitSplitString.isValidMessages(text, TwitSplitString.LIMIT_CHARACTERS)
         if (!valid) {
             Toast.makeText(context, R.string.invalid_message, Toast.LENGTH_LONG).show()
