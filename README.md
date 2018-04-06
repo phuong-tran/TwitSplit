@@ -20,8 +20,8 @@ all of them meeting the 50 character requirement.
 
 #### This is 91 characters excluding the surrounding quotes. When the user presses send, it will send the following messages:
 
-*"1/2 I can't believe Tweeter now supports chunking"
-"2/2 my messages, so I don't have to do it myself."*
+    "1/2 I can't believe Tweeter now supports chunking"
+    "2/2 my messages, so I don't have to do it myself."
 
 #### Each message is now 49 characters, each within the allowed limit.
 
@@ -79,7 +79,7 @@ all of them meeting the 50 character requirement.
 	 1) Model-View-ViewModel Pattern (MVVM) + Data binding
 		Android Architecture Components
 	  
-	 2) DI - Dependency injection with Dagger 2
+	 2) DI - Dependency injection with Dagger2
 
 	 
 ## Message Splitter Algorithm
