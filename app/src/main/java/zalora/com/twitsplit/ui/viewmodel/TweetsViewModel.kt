@@ -79,6 +79,7 @@ class TweetsViewModel @Inject constructor(
             disposable.add(Completable.fromAction {
                 tweetDao.insertTweet(Tweet.buildTweet(text))
                 tweets.value!!.add(0, Tweet.buildTweet(text))
+                tweets.postValue(tweets.value)
             }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
                 eventBus.post(TweetEvent(TweetEvent.ACTION_INSERT_DATA))
                 LOG.debug("Insert Single Message DONE")
@@ -94,6 +95,7 @@ class TweetsViewModel @Inject constructor(
                 }
                 tweetDao.insertTweets(messages)
                 tweets.value!!.addAll(0, messages)
+                tweets.postValue(tweets.value)
             }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
                 LOG.debug("Insert Multi Messages DONE")
                 eventBus.post(TweetEvent(TweetEvent.ACTION_INSERT_DATA))
@@ -107,6 +109,7 @@ class TweetsViewModel @Inject constructor(
         disposable.add(Completable.fromAction {
             tweetDao.deleteAll()
             tweets.value!!.clear()
+            tweets.postValue(tweets.value)
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
             eventBus.post(TweetEvent(TweetEvent.ACTION_REMOVE_ALL_DATA))
         })
