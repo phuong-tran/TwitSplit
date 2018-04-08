@@ -1,9 +1,10 @@
 package zalora.com.twitsplit.utils
 
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TwitSplitString {
+class TwitSplitString @Inject constructor(){
     companion object {
         const val LIMIT_CHARACTERS:Int = 50
         const val WHITE_SPACE: String = " "

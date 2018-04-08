@@ -21,11 +21,6 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideTwitSplitString(): TwitSplitString = TwitSplitString()
-
-
-    @Singleton
-    @Provides
 
     fun provideDisposable() = CompositeDisposable()
 

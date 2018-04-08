@@ -1,5 +1,6 @@
 package zalora.com.twitsplit.ui.fragment
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
@@ -89,6 +90,7 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
         }
     }
 
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!, viewModelFactory).get(TweetsViewModel::class.java)
@@ -107,11 +109,10 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
 
         message_edit_text.addTextChangedListener(textWatcher)
 
+        //viewModel.tweets.observe(this, observer)
 
-        viewModel.tweets.observe(this, observer)
-
-        viewModel.fetchTweets()
-
+        viewModel.tweets.observeForever(observer)
+        viewModel.fetchTweetsMaybe()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -193,8 +194,12 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
         disposable.add(Completable.fromAction({
             tweetDao.deleteAll()
             viewModel.tweets.value!!.clear()
+            viewModel.tweets.postValue(viewModel.tweets.value)
+
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe {
+                    //val value = viewModel.tweets.value
+                    //viewModel.tweets.postValue(viewModel.tweets.value)
                     eventBus.post(TweetEvent(TweetEvent.ACTION_REMOVE_ALL_DATA))
                     LOG.debug("Remove all messages DONE")
                 })
@@ -214,8 +219,10 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
                 disposable.add(Completable.fromAction {
                     tweetDao.insertTweet(Tweet.buildTweet(text))
                     viewModel.tweets.value!!.add(0, Tweet.buildTweet(text))
+                    viewModel.tweets.postValue(viewModel.tweets.value)
                 }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
                     clearText()
+                    //viewModel.tweets.postValue(viewModel.tweets.value)
                     //send_button.isEnabled = true
                     LOG.debug("Insert Single Messages DONE")
                 })
@@ -231,9 +238,11 @@ class TwitSplitFragment : Fragment(), Injectable, TwitSplitPresenter {
                     }
                     tweetDao.insertTweets(tweets)
                     viewModel.tweets.value!!.addAll(0, tweets)
+                    viewModel.tweets.postValue(viewModel.tweets.value)
                 }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe {
                     clearText()
                     //send_button.isEnabled = true
+                    //viewModel.tweets.postValue(viewModel.tweets.value)
                     LOG.debug("Insert Multi Messages DONE")
                     eventBus.post(TweetEvent(TweetEvent.ACTION_INSERT_DATA))
                 })

@@ -32,7 +32,7 @@ class TweetsViewModel @Inject constructor(
         lastMessage.value = ""
     }
 
-    fun fetchTweets() {
+    fun fetchTweetsFlowable() {
 
         disposable.add(
                 tweetDao.fetchMessagesFlowable()
@@ -48,6 +48,21 @@ class TweetsViewModel @Inject constructor(
 
                                 }
                         ))
+
+    }
+
+
+    fun fetchTweetsMaybe() {
+        disposable.add(tweetDao.fetchMessagesMaybe().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+                {
+                    tweets.value = it
+                    eventBus.post(TweetEvent(TweetEvent.ACTION_FETCH_DATA))
+                },
+                {error ->
+                    LOG.debug("Unable to fetch tweets", error)
+                }
+        ))
+
 
     }
 

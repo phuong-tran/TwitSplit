@@ -4,11 +4,12 @@ import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import io.reactivex.Flowable
 import android.arch.persistence.room.OnConflictStrategy
+import io.reactivex.Maybe
 
 @Dao
 interface TweetDao {
     companion object {
-       const val SELECT_ALL_TWEETS:String = "SELECT * FROM tweets ORDER BY id ASC"
+       const val SELECT_ALL_TWEETS:String = "SELECT * FROM tweets ORDER BY createdDate DESC"
        const val COUNT:String = "SELECT COUNT(*) from tweets"
        const val DELETE_ALL_TWEET:String = "DELETE FROM tweets"
        const val DELETE_TWEET:String = "DELETE FROM tweets WHERE id = :id"
@@ -16,6 +17,9 @@ interface TweetDao {
 
     @Query(SELECT_ALL_TWEETS)
     fun fetchMessagesFlowable(): Flowable<MutableList<Tweet>>
+
+    @Query(SELECT_ALL_TWEETS)
+    fun fetchMessagesMaybe(): Maybe<MutableList<Tweet>>
 
     @Query(SELECT_ALL_TWEETS)
     fun fetchMessagesLiveData(): LiveData<MutableList<Tweet>>
