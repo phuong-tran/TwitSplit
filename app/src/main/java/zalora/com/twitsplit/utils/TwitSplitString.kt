@@ -1,13 +1,30 @@
 package zalora.com.twitsplit.utils
 
+import android.content.Context
+import zalora.com.twitsplit.di.scope.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TwitSplitString @Inject constructor(){
+class TwitSplitString @Inject constructor(@ApplicationContext context: Context){
     companion object {
-        const val LIMIT_CHARACTERS:Int = 50
+        const val LIMIT_CHARACTERS_DEFAULT:Int = 50
+        const val LIMIT_CHARACTERS_LARGE_SCREEN:Int = 100
+
         const val WHITE_SPACE: String = " "
+        var LIMIT_CHARACTERS:Int = 50
+    }
+
+
+
+
+
+    init {
+        if (Utils.isTablet(context)) {
+            LIMIT_CHARACTERS = LIMIT_CHARACTERS_LARGE_SCREEN
+        } else {
+            LIMIT_CHARACTERS = LIMIT_CHARACTERS_DEFAULT
+        }
     }
 
     fun getWordArray(str: String): Array<String> {

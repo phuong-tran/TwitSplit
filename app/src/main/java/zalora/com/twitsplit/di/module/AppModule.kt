@@ -7,8 +7,8 @@ import io.reactivex.disposables.CompositeDisposable
 import org.greenrobot.eventbus.EventBus
 import zalora.com.twitsplit.App
 import zalora.com.twitsplit.di.scope.ApplicationContext
-import zalora.com.twitsplit.utils.TwitSplitString
 import javax.inject.Singleton
+
 
 @Module
 class AppModule {
@@ -28,6 +28,5 @@ class AppModule {
     @Singleton
     @Provides
     fun provideEventBus() = EventBus.getDefault()
-
 
 }
